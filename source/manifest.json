@@ -1,20 +1,35 @@
 {
-"name": "Yandex.Music - play/pause",
-  "version": "0.0.1",
-  "description": "Управление плеером Яндекс.Музыки без перехода на вкладку сервиса.",
-  "icons": { "48": "images/icon.ico" },
+  "manifest_version": 2,
+
+  "name": "Yandex.Music - play/pause",
+  "description": "Управление плеером Яндекс.Музыки без перехода на вкладку сервиса",
+  "version": "2.1",
+
   "browser_action": {
-    "default_icon": "images/icon.ico"
+    "default_icon": "favicon.ico",
+    "default_title": "Yandex.Music - play/pause"
   },
-  "background_page" : "background.html",
   "permissions": [
     "tabs",
-      "http://music.yandex.ru/*"
+    "http://music.yandex.ru/*"
   ],
+  "background": {
+    "scripts": ["popup.js"]
+  },
   "content_scripts": [
     {
       "matches": ["http://music.yandex.ru/*"],
-      "js": ["j"]
+      "js": ["popup.js"]
     }
-  ]
+  ],
+  "web_accessible_resources": [
+    "favicon.ico",
+    "favicon_play.ico",
+    "favicon_pause.ico"
+  ],
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  }
 }
