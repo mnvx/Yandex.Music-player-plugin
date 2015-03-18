@@ -10,7 +10,7 @@ var yandexMusicGoogleChromePlugin = {
   /**
    * Адрес Yandex Music
    */
-  url: 'http://music.yandex.ru/',
+  url: 'https://music.yandex.ru/',
 
   /**
    * Является url Yandex Music
