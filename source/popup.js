@@ -13,7 +13,22 @@ var yandexMusicGoogleChromePlugin = {
   url: 'https://music.yandex.ru/',
 
   /**
-   * Является url Yandex Music
+   * Интервал ожидания даблклика, мс
+   */
+  interval: 300,
+
+  /**
+   * Если в настоящий момент обрабатывюется клики (для эмуляции дабл клика)
+   */
+  processingClick: false,
+
+  /**
+   * Для подсчета количества кликов
+   */
+  clickCount: 0,
+
+  /**
+   * Является ли url Yandex Music
    */
   isPleerUrl: function(url) {
     return url.indexOf(this.url) == 0;
@@ -38,7 +53,12 @@ var yandexMusicGoogleChromePlugin = {
     chrome.tabs.getAllInWindow(undefined, function(tabs) {
       for (var i = 0, tab; tab = tabs[i]; i++) {
         if (tab.url && this_.isPleerUrl(tab.url)) {
-          this_.proccessClick(tab.id);
+          this_.clickCount++;
+          if (this_.clickCount == 1) {
+            setTimeout(function () {
+              this_.proccessClick(tab.id);
+            }, this_.interval);
+          }
           return;
         }
       }
@@ -51,9 +71,29 @@ var yandexMusicGoogleChromePlugin = {
    * Отправка сообытия в плеер (нажали play/pause)
    */
   proccessClick: function(tabId) {
-    chrome.tabs.executeScript(tabId, {
-      file: "player.js"
-    });
+    var this_ = this;
+    if (this_.clickCount == 1) {
+      chrome.tabs.executeScript(tabId, {
+        file: "playpause.js"
+      });
+      this_.clickCount = 0;
+    }
+    else {
+      // После даблклика подождем, может будет 3-й клик
+      setTimeout(function () {
+        if (this_.clickCount == 2) {
+          chrome.tabs.executeScript(tabId, {
+            file: "next.js"
+          });
+        }
+        else {
+          chrome.tabs.executeScript(tabId, {
+            file: "previous.js"
+          });
+        }
+        this_.clickCount = 0;
+      }, this_.interval);
+    }
   }
 
 };
