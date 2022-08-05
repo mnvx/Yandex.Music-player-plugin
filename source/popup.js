@@ -33,7 +33,7 @@ var yandexMusicGoogleChromePlugin = {
   isPleerUrl: function(url) {
     return url.indexOf(this.url) == 0;
   },
-  
+
   /**
    * Открыть плеер в новой вкладке
    */
@@ -50,7 +50,7 @@ var yandexMusicGoogleChromePlugin = {
   onClick: function() {
     var this_ = this;
     // Ищем вкладку с Yandex Music
-    chrome.tabs.getAllInWindow(undefined, function(tabs) {
+    chrome.tabs.query({}, function(tabs) {
       for (var i = 0, tab; tab = tabs[i]; i++) {
         if (tab.url && this_.isPleerUrl(tab.url)) {
           this_.clickCount++;
